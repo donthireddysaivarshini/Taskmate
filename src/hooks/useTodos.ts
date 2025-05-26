@@ -6,24 +6,26 @@ export interface Todo {
   text: string;
   completed: boolean;
   createdAt: Date;
+  priority: 'low' | 'medium' | 'high';
 }
 
 export const useTodos = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
 
-  // Add a new task to the list
-  const addTodo = (text: string) => {
+  // Add a new task to the list with priority
+  const addTodo = (text: string, priority: 'low' | 'medium' | 'high' = 'medium') => {
     if (text.trim() === '') return;
     
     const newTodo: Todo = {
       id: Date.now().toString(),
       text: text.trim(),
       completed: false,
-      createdAt: new Date()
+      createdAt: new Date(),
+      priority
     };
     
     setTodos(prevTodos => [newTodo, ...prevTodos]);
-    console.log('Added new todo:', newTodo);
+    console.log('Added new todo with priority:', newTodo);
   };
 
   // Remove a task from the list
