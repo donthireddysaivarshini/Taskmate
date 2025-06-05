@@ -1,43 +1,68 @@
 # ✨ Taskmate — Your Academic Adventure Tracker 🚀
 
-Taskmate is not your average to-do list. It's a **visually playful and productivity-driven task manager** built for **college students** to organize their academic goals, personal growth, and career-building tasks — all in one vibrant space!
+# 🎯 StudyFlow Pro
 
-![Taskmate Screenshot](./screenshot.png) <!-- Replace with your actual image path -->
+**StudyFlow Pro** is a modern task management tool tailored for students and young professionals who aim to organize their study goals, skills, career objectives, and personal growth efficiently — all in one place with a clean, intuitive UI.
 
----
-
-## 🎯 Features
-
-- 🎨 **Beautiful Gradient UI** with dark/light mode  
-- 🎉 **Confetti Celebration** on task completion  
-- 😴 **Cute empty states** with emojis (sleeping cat included)  
-- ⚡ **Priority Tags**: Urgent 🔥 | Normal ⚡ | Chill 🌱  
-- 🔄 **Smooth Animations** for a modern experience  
-- 🧭 **Tab View**: All | Active | Done  
-- 📊 **Progress bar** to keep you motivated  
-- 📝 **Fun placeholders** and animated touches for joy!
+![StudyFlow Pro Screenshot](./todo1.png)
 
 ---
 
-## 🚀 Ideal For
+## ✨ Features
 
-- Students managing **assignments, projects, and skill-building**
-- Anyone who wants a **productive tool with personality**
-- Those who love **design-first** apps with **engaging UX**
+- 🧼 **Minimalist UI** with light/dark mode support
+- 🔍 **Category Filters**: Study, Skill, Career, Goal, General
+- 📌 **Priority Levels**: High, Medium, Low
+- 📊 **Status Filters**: All | Active | Completed
+- ➕ **Quick Add Task** with dropdown classification
+- ⚙️ Smooth performance and responsive layout
+- 🔄 Easy task categorization and tracking
+
+---
+
+## 🚀 Perfect For
+
+- Students managing deadlines and academic tasks
+- Learners tracking new skills
+- Professionals managing goals and career plans
+- Productivity lovers who prefer a clutter-free interface
+
+---
+
+## 🛠 Tech Stack
+
+- HTML, CSS, JavaScript (Vanilla or Framework)
+- Responsive design best practices
+- Designed with [Lovable.dev](https://lovable.dev/) UI components
+
+---
+
+## 🧪 Upcoming Features (In Progress)
+
+> We're just getting started! Here’s what’s planned:
+
+- ⏰ Reminders & Notifications
+- 🗓️ Calendar View Integration
+- 📈 Productivity Charts
+- 🎯 Task Recommendations (AI-based)
+- 🌐 Sync with Google Tasks / Calendar
+
+---
+
+
+## 📂 Getting Started
+
+```bash
+git clone https://github.com/donthireddysaivarshini/Taskmate.git
+cd Taskmate
+# Open in browser or your favorite editor
 
 ---
 
 ## 🛠 Built With
 
-- **HTML, CSS, JavaScript** (or replace with your actual stack)
 - Lovable (for design and code generation)
 - GitHub for version control and collaboration
-
----
-
-## 📸 Screenshots
-
-> _Add screenshots or a short GIF showing the features here_
 
 ---
 
