@@ -7,13 +7,18 @@ export interface Todo {
   completed: boolean;
   createdAt: Date;
   priority: 'low' | 'medium' | 'high';
+  category: 'study' | 'skill' | 'career' | 'goal' | 'general';
 }
 
 export const useTodos = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
 
-  // Add a new task to the list with priority
-  const addTodo = (text: string, priority: 'low' | 'medium' | 'high' = 'medium') => {
+  // Add a new task to the list with priority and category
+  const addTodo = (
+    text: string, 
+    priority: 'low' | 'medium' | 'high' = 'medium',
+    category: 'study' | 'skill' | 'career' | 'goal' | 'general' = 'general'
+  ) => {
     if (text.trim() === '') return;
     
     const newTodo: Todo = {
@@ -21,11 +26,12 @@ export const useTodos = () => {
       text: text.trim(),
       completed: false,
       createdAt: new Date(),
-      priority
+      priority,
+      category
     };
     
     setTodos(prevTodos => [newTodo, ...prevTodos]);
-    console.log('Added new todo with priority:', newTodo);
+    console.log('Added new todo with category:', newTodo);
   };
 
   // Remove a task from the list
@@ -55,11 +61,27 @@ export const useTodos = () => {
     return { total, completed, pending };
   };
 
+  // Get stats by category
+  const getCategoryStats = () => {
+    const categories = ['study', 'skill', 'career', 'goal', 'general'] as const;
+    
+    return categories.reduce((stats, category) => {
+      const categoryTodos = todos.filter(todo => todo.category === category);
+      stats[category] = {
+        total: categoryTodos.length,
+        completed: categoryTodos.filter(todo => todo.completed).length,
+        pending: categoryTodos.filter(todo => !todo.completed).length
+      };
+      return stats;
+    }, {} as Record<string, { total: number; completed: number; pending: number }>);
+  };
+
   return {
     todos,
     addTodo,
     deleteTodo,
     toggleTodo,
-    getStats
+    getStats,
+    getCategoryStats
   };
 };

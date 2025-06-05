@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { Trash2, Check } from 'lucide-react';
+import { Trash2, Check, BookOpen, Brain, Rocket, Target, ListTodo } from 'lucide-react';
 import { Todo } from '@/hooks/useTodos';
 import { Button } from '@/components/ui/button';
 
@@ -52,7 +52,53 @@ const TodoItem: React.FC<TodoItemProps> = ({ todo, onToggle, onDelete, darkMode 
     }
   };
 
+  const getCategoryConfig = (category: string) => {
+    switch (category) {
+      case 'study':
+        return { 
+          emoji: '📚', 
+          name: 'Study', 
+          icon: BookOpen, 
+          color: 'bg-blue-500/20 border-blue-400',
+          textColor: 'text-blue-600'
+        };
+      case 'skill':
+        return { 
+          emoji: '🧠', 
+          name: 'Skill', 
+          icon: Brain, 
+          color: 'bg-purple-500/20 border-purple-400',
+          textColor: 'text-purple-600'
+        };
+      case 'career':
+        return { 
+          emoji: '🚀', 
+          name: 'Career', 
+          icon: Rocket, 
+          color: 'bg-green-500/20 border-green-400',
+          textColor: 'text-green-600'
+        };
+      case 'goal':
+        return { 
+          emoji: '🎯', 
+          name: 'Goal', 
+          icon: Target, 
+          color: 'bg-orange-500/20 border-orange-400',
+          textColor: 'text-orange-600'
+        };
+      default:
+        return { 
+          emoji: '📝', 
+          name: 'General', 
+          icon: ListTodo, 
+          color: 'bg-gray-500/20 border-gray-400',
+          textColor: 'text-gray-600'
+        };
+    }
+  };
+
   const priorityConfig = getPriorityConfig(todo.priority || 'medium');
+  const categoryConfig = getCategoryConfig(todo.category || 'general');
 
   return (
     <div className={`group flex items-center gap-4 p-4 rounded-2xl border-2 transition-all duration-300 transform hover:scale-[1.02] hover:shadow-xl ${
@@ -85,7 +131,7 @@ const TodoItem: React.FC<TodoItemProps> = ({ todo, onToggle, onDelete, darkMode 
       </Button>
 
       {/* Task content */}
-      <div className="flex-1 space-y-1">
+      <div className="flex-1 space-y-2">
         <div className="flex items-center gap-2">
           <span 
             className={`flex-1 text-lg font-medium transition-all duration-300 cursor-pointer ${
@@ -97,6 +143,17 @@ const TodoItem: React.FC<TodoItemProps> = ({ todo, onToggle, onDelete, darkMode 
           >
             {todo.text}
           </span>
+        </div>
+        
+        {/* Category and Priority badges */}
+        <div className="flex items-center gap-2">
+          {/* Category badge */}
+          <div className={`px-3 py-1 rounded-full text-xs font-bold border ${categoryConfig.color} ${
+            darkMode ? 'text-white' : categoryConfig.textColor
+          } flex items-center gap-1`}>
+            <span>{categoryConfig.emoji}</span>
+            <span>{categoryConfig.name}</span>
+          </div>
           
           {/* Priority badge */}
           <div className={`px-3 py-1 rounded-full text-xs font-bold text-white ${priorityConfig.color} shadow-lg ${priorityConfig.glow} flex items-center gap-1`}>

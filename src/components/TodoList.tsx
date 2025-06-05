@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { Plus, ListTodo, CheckCircle2, Clock, Moon, Sun, Sparkles } from 'lucide-react';
+import { Plus, ListTodo, CheckCircle2, Clock, Moon, Sun, Sparkles, BookOpen, Brain, Rocket, Target } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -13,14 +13,17 @@ import EmptyState from './EmptyState';
 import ConfettiEffect from './ConfettiEffect';
 
 const TodoList: React.FC = () => {
-  const { todos, addTodo, deleteTodo, toggleTodo, getStats } = useTodos();
+  const { todos, addTodo, deleteTodo, toggleTodo, getStats, getCategoryStats } = useTodos();
   const [inputValue, setInputValue] = useState('');
   const [priority, setPriority] = useState<'low' | 'medium' | 'high'>('medium');
+  const [category, setCategory] = useState<'study' | 'skill' | 'career' | 'goal' | 'general'>('general');
   const [darkMode, setDarkMode] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
   const [activeTab, setActiveTab] = useState('all');
+  const [categoryFilter, setCategoryFilter] = useState<string>('all');
   
   const stats = getStats();
+  const categoryStats = getCategoryStats();
   const completionPercentage = stats.total > 0 ? Math.round((stats.completed / stats.total) * 100) : 0;
   
   const allTasksCompleted = stats.total > 0 && stats.completed === stats.total;
@@ -29,9 +32,10 @@ const TodoList: React.FC = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (inputValue.trim()) {
-      addTodo(inputValue.trim(), priority);
+      addTodo(inputValue.trim(), priority, category);
       setInputValue('');
       setPriority('medium');
+      setCategory('general');
     }
   };
 
@@ -45,19 +49,46 @@ const TodoList: React.FC = () => {
     toggleTodo(id);
   };
 
-  // Filter todos based on active tab
+  // Filter todos based on active tab and category
   const getFilteredTodos = () => {
+    let filtered = todos;
+    
+    // Filter by completion status
     switch (activeTab) {
       case 'active':
-        return todos.filter(todo => !todo.completed);
+        filtered = todos.filter(todo => !todo.completed);
+        break;
       case 'completed':
-        return todos.filter(todo => todo.completed);
+        filtered = todos.filter(todo => todo.completed);
+        break;
       default:
-        return todos;
+        filtered = todos;
     }
+    
+    // Filter by category
+    if (categoryFilter !== 'all') {
+      filtered = filtered.filter(todo => todo.category === categoryFilter);
+    }
+    
+    return filtered;
   };
 
   const filteredTodos = getFilteredTodos();
+
+  const getCategoryConfig = (categoryType: string) => {
+    switch (categoryType) {
+      case 'study':
+        return { emoji: '📚', name: 'Study Tasks', icon: BookOpen, color: 'bg-blue-500' };
+      case 'skill':
+        return { emoji: '🧠', name: 'Skill Building', icon: Brain, color: 'bg-purple-500' };
+      case 'career':
+        return { emoji: '🚀', name: 'Career Tasks', icon: Rocket, color: 'bg-green-500' };
+      case 'goal':
+        return { emoji: '🎯', name: 'Weekly Goals', icon: Target, color: 'bg-orange-500' };
+      default:
+        return { emoji: '📝', name: 'General', icon: ListTodo, color: 'bg-gray-500' };
+    }
+  };
 
   return (
     <div className={`min-h-screen transition-all duration-500 ${
@@ -76,14 +107,14 @@ const TodoList: React.FC = () => {
       {/* Confetti Effect */}
       {showConfetti && <ConfettiEffect />}
 
-      <div className="max-w-4xl mx-auto space-y-6 relative z-10">
+      <div className="max-w-5xl mx-auto space-y-6 relative z-10">
         {/* Header with dark mode toggle */}
         <div className="text-center space-y-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3 text-white">
               <div className="flex items-center gap-2 text-4xl font-bold font-['Poppins']">
                 <Sparkles className="w-10 h-10 text-yellow-300 animate-pulse" />
-                ✨ Fun Todo List
+                🎓 StudyFlow Pro
               </div>
             </div>
             
@@ -119,13 +150,50 @@ const TodoList: React.FC = () => {
           )}
         </div>
 
+        {/* Category filter tabs */}
+        <Card className={`shadow-2xl backdrop-blur-sm border-0 ${
+          darkMode ? 'bg-gray-800/50' : 'bg-white/20'
+        } transition-all duration-300`}>
+          <CardHeader>
+            <CardTitle className={`text-xl font-['Poppins'] ${darkMode ? 'text-white' : 'text-gray-800'}`}>
+              📊 Categories
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="flex flex-wrap gap-2">
+              <Button
+                variant={categoryFilter === 'all' ? 'default' : 'outline'}
+                onClick={() => setCategoryFilter('all')}
+                className="rounded-full"
+              >
+                All ({todos.length})
+              </Button>
+              {['study', 'skill', 'career', 'goal', 'general'].map((cat) => {
+                const config = getCategoryConfig(cat);
+                const count = categoryStats[cat]?.total || 0;
+                return (
+                  <Button
+                    key={cat}
+                    variant={categoryFilter === cat ? 'default' : 'outline'}
+                    onClick={() => setCategoryFilter(cat)}
+                    className="rounded-full flex items-center gap-1"
+                  >
+                    <span>{config.emoji}</span>
+                    <span>{config.name} ({count})</span>
+                  </Button>
+                );
+              })}
+            </div>
+          </CardContent>
+        </Card>
+
         {/* Add new task form */}
         <Card className={`shadow-2xl backdrop-blur-sm border-0 ${
           darkMode ? 'bg-gray-800/50' : 'bg-white/20'
         } transition-all duration-300 hover:scale-[1.02]`}>
           <CardHeader>
             <CardTitle className={`text-xl font-['Poppins'] ${darkMode ? 'text-white' : 'text-gray-800'}`}>
-              ✨ Add New Adventure
+              ✨ Add New Task
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -133,7 +201,7 @@ const TodoList: React.FC = () => {
               <div className="flex gap-2">
                 <Input
                   type="text"
-                  placeholder="What exciting task awaits? 🚀"
+                  placeholder="What needs to be done? 🚀"
                   value={inputValue}
                   onChange={(e) => setInputValue(e.target.value)}
                   className={`flex-1 text-lg h-12 border-2 transition-all duration-200 focus:scale-[1.02] ${
@@ -142,6 +210,25 @@ const TodoList: React.FC = () => {
                       : 'bg-white/80 border-purple-300 text-gray-800'
                   }`}
                 />
+              </div>
+              
+              <div className="flex gap-2">
+                {/* Category selector */}
+                <select 
+                  value={category} 
+                  onChange={(e) => setCategory(e.target.value as any)}
+                  className={`px-4 py-2 rounded-lg border-2 transition-all duration-200 ${
+                    darkMode 
+                      ? 'bg-gray-700/50 border-purple-500 text-white' 
+                      : 'bg-white/80 border-purple-300 text-gray-800'
+                  }`}
+                >
+                  <option value="general">📝 General</option>
+                  <option value="study">📚 Study</option>
+                  <option value="skill">🧠 Skill Building</option>
+                  <option value="career">🚀 Career</option>
+                  <option value="goal">🎯 Weekly Goal</option>
+                </select>
                 
                 {/* Priority selector */}
                 <select 
@@ -165,7 +252,7 @@ const TodoList: React.FC = () => {
                 className="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-bold py-3 rounded-xl transition-all duration-300 hover:scale-105 hover:shadow-lg transform"
               >
                 <Plus className="w-5 h-5 mr-2" />
-                Add to Adventure List! 🎯
+                Add Task! 🎯
               </Button>
             </form>
           </CardContent>
