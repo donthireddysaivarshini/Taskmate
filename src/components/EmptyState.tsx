@@ -1,5 +1,6 @@
 
 import React from 'react';
+import { CheckCircle2, Target, Clock } from 'lucide-react';
 
 interface EmptyStateProps {
   darkMode: boolean;
@@ -11,61 +12,50 @@ const EmptyState: React.FC<EmptyStateProps> = ({ darkMode, activeTab }) => {
     switch (activeTab) {
       case 'active':
         return {
-          emoji: '🎯',
-          title: 'No active tasks!',
-          message: 'Time to add some exciting adventures!',
-          illustration: '🚀'
+          icon: Clock,
+          title: 'No active tasks',
+          message: 'All caught up! Add a new task to get started.',
+          color: 'text-blue-500'
         };
       case 'completed':
         return {
-          emoji: '🏆',
-          title: 'No completed tasks yet!',
-          message: 'Complete some tasks to see them here!',
-          illustration: '⭐'
+          icon: CheckCircle2,
+          title: 'No completed tasks yet',
+          message: 'Complete some tasks to see your progress here.',
+          color: 'text-green-500'
         };
       default:
         return {
-          emoji: '🐱',
-          title: 'No tasks yet!',
-          message: 'Time to relax and maybe add some fun tasks!',
-          illustration: '😴'
+          icon: Target,
+          title: 'No tasks yet',
+          message: 'Create your first task to start being productive.',
+          color: 'text-purple-500'
         };
     }
   };
 
   const content = getEmptyStateContent();
+  const IconComponent = content.icon;
 
   return (
-    <div className="text-center py-16 space-y-6">
-      {/* Animated illustration */}
-      <div className="relative">
-        <div className="text-8xl animate-bounce">
-          {content.illustration}
-        </div>
-        <div className="text-4xl absolute -top-2 -right-2 animate-pulse">
-          {content.emoji}
+    <div className="text-center py-16 space-y-4">
+      <div className={`flex justify-center mb-4`}>
+        <div className={`p-4 rounded-full ${darkMode ? 'bg-slate-700' : 'bg-slate-100'}`}>
+          <IconComponent className={`w-8 h-8 ${content.color}`} />
         </div>
       </div>
       
-      {/* Text content */}
       <div className="space-y-2">
-        <h3 className={`text-2xl font-bold font-['Poppins'] ${
-          darkMode ? 'text-white' : 'text-gray-800'
+        <h3 className={`text-xl font-semibold ${
+          darkMode ? 'text-white' : 'text-slate-900'
         }`}>
           {content.title}
         </h3>
-        <p className={`text-lg ${
-          darkMode ? 'text-gray-300' : 'text-gray-600'
+        <p className={`text-base ${
+          darkMode ? 'text-slate-400' : 'text-slate-600'
         }`}>
           {content.message}
         </p>
-      </div>
-
-      {/* Decorative elements */}
-      <div className="flex justify-center gap-4 text-2xl">
-        <span className="animate-pulse">✨</span>
-        <span className="animate-bounce" style={{ animationDelay: '0.2s' }}>🌟</span>
-        <span className="animate-pulse" style={{ animationDelay: '0.4s' }}>💫</span>
       </div>
     </div>
   );
