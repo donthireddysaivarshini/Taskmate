@@ -79,3 +79,5 @@ cd Taskmate
 
 Want to contribute your ideas or help enhance the app?  
 Pull requests and suggestions are welcome! 💡
+
+---
